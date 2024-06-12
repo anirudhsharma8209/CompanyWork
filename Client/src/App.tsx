@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import UpdateModal from './modals/UpdateModal';
 import AddModal from './modals/AddModal';
 import { IoReload } from "react-icons/io5";
+// import {addProductCreator} from 
 // interface Products {
 //   id : number,
 //   title : string,
@@ -24,7 +25,7 @@ function App() {
   let [updateRecord, setUpdateRecord] = useState();
   let [addProduct, setAddProduct] = useState<boolean>(false);
 
-  useEffect(()=>{               
+  useEffect(()=>{                   
     setApiResult(apiResult);
   }, [])
 
@@ -56,7 +57,7 @@ function App() {
           <h1 className='m-3'>Products</h1>
         </div>              
         <div className="addProduct">
-          <button className='rounded-lg p-2 bg-violet-600' onClick={() => setAddProduct(true)}>Add Product </button>
+          <button className='rounded-lg p-2 bg-violet-600' onClick={() => {setAddProduct(true);}}>Add Product </button>
         </div>
       </Container>
       <Container fluid className='w-75  d-flex justify-content-between align-items-center'>
