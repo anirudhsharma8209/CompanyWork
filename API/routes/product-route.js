@@ -4,6 +4,6 @@ const ProductController = require("../controllers/product-controller");
 
 ProductRouter.route("/").get(ProductController.handleAllProducts).post(ProductController.handleCreateProduct);
 
-ProductRouter.route("/:id").put(ProductController.handleUpdateProduct).delete(ProductController.handleDeleteProduct);
+ProductRouter.route("/:id").put(ProductController.handleUpdateProduct).delete(ProductController.handleDeleteProduct).get(ProductController.handleSingleProduct);
 
 module.exports = ProductRouter;
