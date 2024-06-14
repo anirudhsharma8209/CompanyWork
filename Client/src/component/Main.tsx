@@ -10,7 +10,7 @@ const Main = (props : any) => {
          {
           props.apiResult.map((item : any) =>
             <div key={item.id}>
-              <Card item={item} handleShow={props.handleShow} updateSetter={props.updateSetter} deleteRecord={props.deleteRecord} />
+              <Card item={item} handleShow={props.handleShow} setApiResult={props.setApiResult} updateSetter={props.updateSetter} deleteRecord={props.deleteRecord} />
             </div>
           )
         }

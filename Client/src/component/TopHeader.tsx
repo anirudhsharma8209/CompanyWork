@@ -22,7 +22,7 @@ const TopHeader = (props: any) => {
           </button>
         </div>
         <div className="addProduct">
-          <button className='rounded-lg p-2 bg-violet-600' onClick={() => { props.setAddProduct(true); }}>Add Product </button>
+          <button className='rounded-lg p-2 bg-violet-600' onClick={() => { props.setAddProduct(true); }}>Add Product </button>          
         </div>
       </Container >
     </Fragment>

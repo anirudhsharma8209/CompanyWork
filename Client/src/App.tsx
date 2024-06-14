@@ -12,7 +12,7 @@ import Main from './component/Main';
 
 function App() {
   let [apiResult, setApiResult] = useState(data.products)
-  let [valueSearcher, setValueSearcher] = useState<string>("");
+  // let [valueSearcher, setValueSearcher] = useState<string>("");
   let [showModal, handleShow] = useState<boolean>(false);
   let [updateRecord, setUpdateRecord] = useState();
   let [addProduct, setAddProduct] = useState<boolean>(false);    
@@ -25,20 +25,13 @@ function App() {
 
   const reloadData = () => {
     setApiResult(data.products);
-    setValueSearcher("")
+    // setValueSearcher("")
   }
 
-  const searchRecord = () => {
-    let filterResult = apiResult.filter((item) => item.title == valueSearcher)
-    filterResult.length !== 0 ? setApiResult(filterResult) : valueSearcher !== "" ? alert("Record not found....") : null;
-  }
-
-  const deleteRecord = (deleteId: number) => {    
-    let confirmation = confirm("Do you want to delete : ");
-    confirmation
-      ? setApiResult(apiResult.filter((item) => item.id != deleteId))
-      : null;
-  }
+  // const searchRecord = () => {
+  //   let filterResult = apiResult.filter((item) => item.title == valueSearcher)
+  //   filterResult.length !== 0 ? setApiResult(filterResult) : valueSearcher !== "" ? alert("Record not found....") : null;
+  // }
 
   const updateSetter = (updateItem: any) => {
     setUpdateRecord(updateItem);  
@@ -47,13 +40,13 @@ function App() {
   return (
     <Fragment>  
       <BrowserRouter>
-      { giveAccess ?  <Navbar setAddProduct={setAddProduct} setGiveAccess={setGiveAccess}  valueSearcher={valueSearcher} setValueSearcher={setValueSearcher} searchRecord={searchRecord} reloadData={reloadData} apiResult={apiResult} />   : null   }
+      { giveAccess ?  <Navbar setAddProduct={setAddProduct} setApiResult={setApiResult} setGiveAccess={setGiveAccess}  reloadData={reloadData} apiResult={apiResult} />   : null   }
         <Routes>                    
-          <Route path='/' index element={!giveAccess ? <Register /> :  <Main apiResult={apiResult} handleShow={handleShow} updateSetter={updateSetter} deleteRecord={deleteRecord} /> } />
+          <Route path='/' index element={!giveAccess ? <Register /> :  <Main apiResult={apiResult} setApiResult={setApiResult} handleShow={handleShow} updateSetter={updateSetter} /> } />
           <Route path='/loginuser' element={!giveAccess && <Login setGiveAccess={setGiveAccess} />} />            
         </Routes>        
-        <UpdateModal showModal={showModal} handleShow={handleShow} updateRecord={updateRecord} apiResult={apiResult} setApiResult={setApiResult} />                
-        <AddModal setAddProductModal={setAddProduct} addProduct={addProduct} apiResult={apiResult} setApiResult={setApiResult} />        
+        <UpdateModal showModal={showModal} handleShow={handleShow} updateRecord={updateRecord} setApiResult={setApiResult} />                
+        <AddModal setAddProductModal={setAddProduct} addProduct={addProduct} setApiResult={setApiResult} />        
       </BrowserRouter>
     </Fragment>
   )

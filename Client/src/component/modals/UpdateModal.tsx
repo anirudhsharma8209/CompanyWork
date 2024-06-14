@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
 import { Form,Button,Modal } from "react-bootstrap"
+import store from "../../store/Store";
+import { updateProductAction } from "../../actionsCreators/actionCreator";
 
 const UpdateModal = (props:any) => {      
     let [productName, setProductName ] = useState("");
@@ -12,10 +14,12 @@ const UpdateModal = (props:any) => {
       setProductImage(props.updateRecord?.images[0]);
     }, [props.updateRecord])
 
-    const setUpdateFormData = (updateRecord: any) => {
-      props.setApiResult(props.apiResult.map((item : any) => (item.id === updateRecord.id) ? {"id" : updateRecord.id, "title" : productName, "description" : productDesc, "images" : [productImage]} : item))    
+    const updateProductToRedux = (updateRecord : any) => {      
+      store.dispatch(updateProductAction({id : updateRecord.id, title : productName, description : productDesc, images : [productImage]}))    
+      props.setApiResult(store.getState().products)
       handleClose();
     }
+
     const handleClose = () => {
       props.handleShow(!props.showModal)
     }   
@@ -49,8 +53,8 @@ const UpdateModal = (props:any) => {
         <Modal.Footer>
           <Button variant="danger" onClick={handleClose}>
             Close
-          </Button>
-          <Button variant="success" onClick={() => {setUpdateFormData(props.updateRecord)}}>
+          </Button>       
+          <Button variant="success" onClick={() => {updateProductToRedux(props.updateRecord)}}>
             Update Changes 
           </Button>
         </Modal.Footer>
