@@ -6,8 +6,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import Cookie from 'js-cookie';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import {AUTH} from '../../constant/constant';
+import { loginUserAuth } from '../../api/authApi';
 
-const Login = (props: any) => {
+const Login = (props: any) => {    
     const schema = yup.object().shape({
         username : yup.string().required().trim(),        
         password: yup.string().min(4).max(32).required("Required ").trim(),
@@ -16,9 +18,8 @@ const Login = (props: any) => {
     const navigate = useNavigate();
     const onSubmit = async (data: any) => {
         try {
-            let response = await axios.post('http://localhost:4500/api/loginuser', data);
-            console.log(response);            
-            console.log(Cookie.get('token'));
+            let response = await axios.post(AUTH.LOGINUSER, data);              
+            Cookie.set("token", response.data.token);              
             props.setGiveAccess(true);
             navigate('/');
         } catch (error) {
@@ -26,13 +27,22 @@ const Login = (props: any) => {
             props.setGiveAccess(false);
         }
     }
+    // const onSubmit = (data : any) => {
+    //     // if(loginUserAuth(data)){
+    //     //     props.setGiveAccess(false)
+    //     //     }else {
+    //     //     navigate("/")
+    //     //     props.setGiveAccess(true);
+    //     // }
+    //     console.log(loginUserAuth(data));
+    // }
     return (
         <Fragment>
             <Container className='w-75 mt-32'>
                 <Container className='d-flex justify-content-between align-items-center'>
                     <h1>Login Form : </h1>
                     <button className='bg-blue-700 p-2 rounded-lg w-50' >
-                        <Link to="/" className="text-decoration-none text-white  fw-bold">Signup</Link>
+                        <Link to="/register" className="text-decoration-none text-white  fw-bold">Signup</Link>
                     </button>
                 </Container>
                 <Form onSubmit={handleSubmit(onSubmit)}>

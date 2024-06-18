@@ -1,11 +1,13 @@
 import { Fragment } from 'react'
-import store from '../store/Store';
-import { deleteProductAction } from '../actionsCreators/actionCreator';
+import { PRODUCT } from '../../constant/constant';
+import axios from 'axios';
 
 const Card = (props : any) => {   
-    const deleteProductFromRedux = (product : any) => {
-        store.dispatch(deleteProductAction(product));      
-        confirm("Do You Want To Delete : ") ? props.setApiResult(store.getState().products) : null;
+    const deleteProductFromRedux = async (product : any) => {     
+        console.log(PRODUCT.REMOVEPRODUCT);           
+        if(confirm("Do You Want To Delete : ")){            
+            await axios.delete(`${PRODUCT.REMOVEPRODUCT}/id=${product.id}`);
+        }
     }
     return (
         <Fragment>
@@ -17,7 +19,7 @@ const Card = (props : any) => {
                 </div>
                 <div className="d-flex mb-3 justify-content-around align-items-center">
                     <button className='bg-green-500 hover:bg-green-900  text-white p-2 rounded-lg' onClick={() => { props.handleShow(true); props.updateSetter(props.item) }}>Update</button>
-                    <button className='bg-red-600 hover:bg-red-900 text-white p-2 rounded-lg' style={{ width: "100px" }} onClick={() => { deleteProductFromRedux(props.item) }}>Delete</button>                    
+                    <button className='bg-red-600 hover:bg-red-900 text-white p-2 rounded-lg' style={{ width: "100px" }} onClick={() => { deleteProductFromRedux(props.item);}}>Delete</button>                    
                 </div>
             </div>
         </Fragment>

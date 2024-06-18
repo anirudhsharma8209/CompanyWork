@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react"
 import { Form,Button,Modal } from "react-bootstrap"
-import store from "../../store/Store";
-import { updateProductAction } from "../../actionsCreators/actionCreator";
+import { updateProductAction } from "../../redux/actionsCreators/actionCreator";
+import store from "../../redux/store/Store";
+import axios from "axios";
+import { PRODUCT } from "../../constant/constant";
+import { combineSlices } from "@reduxjs/toolkit";
+
 
 const UpdateModal = (props:any) => {      
     let [productName, setProductName ] = useState("");
@@ -14,9 +18,15 @@ const UpdateModal = (props:any) => {
       setProductImage(props.updateRecord?.images[0]);
     }, [props.updateRecord])
 
-    const updateProductToRedux = (updateRecord : any) => {      
-      store.dispatch(updateProductAction({id : updateRecord.id, title : productName, description : productDesc, images : [productImage]}))    
-      props.setApiResult(store.getState().products)
+    const updateProductToRedux = async (updateRecord : any) => {      
+      console.log(PRODUCT.UPDATEPRODUCT);
+      updateRecord.title = productName;
+      updateRecord.description = productDesc;
+      updateRecord.images = productImage;              
+      await axios.put(PRODUCT.UPDATEPRODUCT, updateRecord); 
+      store.dispatch(updateProductAction({updateRecord}));
+      // store.dispatch(updateProductAction({id : updateRecord.id, title : productName, description : productDesc, images : [productImage]}))    
+      // props.setApiResult(store.getState().products)
       handleClose();
     }
 

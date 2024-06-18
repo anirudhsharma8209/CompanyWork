@@ -1,52 +1,53 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
-import data from './data/data.json';
+import data from './constant/data/data.json';
 import { useEffect, useState } from 'react'
 import UpdateModal from './component/modals/UpdateModal';
 import AddModal from './component/modals/AddModal';
-import Navbar from './component/Navbar';
+import Navbar from './component/layout/Navbar';
 import { Fragment } from 'react';
-import Register from './auth/Register';
-import Login from './auth/Login';
-import {BrowserRouter, Routes, Route} from 'react-router-dom' 
-import Main from './component/Main';
+import Cookie from 'js-cookie';
+import Register from './component/auth/Register';
+import Login from './component/auth/Login';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Home from './component/Home';
+import store from './redux/store/Store';
+import { getProductAction,renderProducts } from './redux/actionsCreators/actionCreator';
+import { PRODUCT } from './constant/constant';
 
 function App() {
-  let [apiResult, setApiResult] = useState(data.products)
-  // let [valueSearcher, setValueSearcher] = useState<string>("");
+  let [apiResult, setApiResult] = useState()  
   let [showModal, handleShow] = useState<boolean>(false);
   let [updateRecord, setUpdateRecord] = useState();
-  let [addProduct, setAddProduct] = useState<boolean>(false);    
-
+  let [addProduct, setAddProduct] = useState<boolean>(false);
   let [giveAccess, setGiveAccess] = useState(false);
 
   useEffect(() => {
-    setApiResult(apiResult);
-  }, [])
+    (Cookie.get("token") && setGiveAccess(true));;
+    getProductAction(PRODUCT.ALLPRODUCTS).then(() => {
+      store.dispatch(renderProducts());
+      store.getState().then((data: any) => setApiResult(data.data?.products?.map((item: any) => ({ id: item.id, title: item.title, description: item.description, images: [item.images] }))))
+    })
+  }, []);
 
   const reloadData = () => {
-    setApiResult(data.products);
+    // setApiResult(data.products);
     // setValueSearcher("")
   }
 
-  // const searchRecord = () => {
-  //   let filterResult = apiResult.filter((item) => item.title == valueSearcher)
-  //   filterResult.length !== 0 ? setApiResult(filterResult) : valueSearcher !== "" ? alert("Record not found....") : null;
-  // }
-
   const updateSetter = (updateItem: any) => {
-    setUpdateRecord(updateItem);  
+    setUpdateRecord(updateItem);
   }
-
   return (
-    <Fragment>  
-      <BrowserRouter>
-      { giveAccess ?  <Navbar setAddProduct={setAddProduct} setApiResult={setApiResult} setGiveAccess={setGiveAccess}  reloadData={reloadData} apiResult={apiResult} />   : null   }
-        <Routes>                    
-          <Route path='/' index element={!giveAccess ? <Register /> :  <Main apiResult={apiResult} setApiResult={setApiResult} handleShow={handleShow} updateSetter={updateSetter} /> } />
-          <Route path='/loginuser' element={!giveAccess && <Login setGiveAccess={setGiveAccess} />} />            
-        </Routes>        
-        <UpdateModal showModal={showModal} handleShow={handleShow} updateRecord={updateRecord} setApiResult={setApiResult} />                
-        <AddModal setAddProductModal={setAddProduct} addProduct={addProduct} setApiResult={setApiResult} />        
+    <Fragment>
+      <BrowserRouter>        
+        {giveAccess && <Navbar setAddProduct={setAddProduct} setApiResult={setApiResult} setGiveAccess={setGiveAccess} reloadData={reloadData} apiResult={apiResult} />}
+        <Routes>
+          <Route path='/' element={<Home apiResult={apiResult} setApiResult={setApiResult} handleShow={handleShow} setGiveAccess={setGiveAccess} updateSetter={updateSetter} />} />
+          <Route path='/login' element={<Login setGiveAccess={setGiveAccess} />} />
+          <Route path='register' element={<Register />} />
+        </Routes>
+        <UpdateModal showModal={showModal} handleShow={handleShow} updateRecord={updateRecord} setApiResult={setApiResult} />
+        <AddModal setAddProductModal={setAddProduct} addProduct={addProduct} setApiResult={setApiResult} apiResult={apiResult} />
       </BrowserRouter>
     </Fragment>
   )

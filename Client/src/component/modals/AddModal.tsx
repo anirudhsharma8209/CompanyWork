@@ -1,13 +1,15 @@
 import { Modal, Form } from "react-bootstrap"
-import { addProductAction } from "../../actionsCreators/actionCreator";
-import store from "../../store/Store";
 import { useForm } from 'react-hook-form'
+// import { PRODUCT } from "../../constant/constant";
+import store from "../../redux/store/Store";
+import { addProductAction } from "../../redux/actionsCreators/actionCreator";
 
 const AddModal = (props: any) => {
-    const { register, handleSubmit } = useForm();
-    const addProductToRedux = (product: any) => {
-        store.dispatch(addProductAction({ id: props.apiResult.length + 1, title: product.addProduct, description: product.adddescription, images: [product.addImage] }))
-        props.setApiResult(store.getState().products);
+    const { register, handleSubmit, reset } = useForm();
+    const addProductToRedux = async (product: any) => {        
+        let newProduct = {title : product.addproduct, description : product.adddescription, images : [product.addimage]}                
+        store.dispatch(addProductAction(newProduct));        
+        props.setApiResult(props.apiResult)
         handleCloseModal();
     }
 
@@ -39,7 +41,7 @@ const AddModal = (props: any) => {
                         <Form.Control type="text" placeholder="Enter Image URL : " {...register("addimage")} />
                     </Form.Group>
                     <Form.Group className="mt-3">
-                        <button className="bg-indigo-700 p-2 text-white rounded-lg" >Add Product </button>
+                        <button className="bg-indigo-700 p-2 text-white rounded-lg" onClick={() => {reset({addproduct : "", adddescription : "", addimage : ""})}}>Add Product </button>
                     </Form.Group>
                 </Form>
             </Modal.Body>

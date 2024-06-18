@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
-import TopHeader from './TopHeader'
 import { Container } from 'react-bootstrap'
 import Header from './Header'
+import TopHeader from './TopHeader'
 
 
 const NavBar = (props : any) => {

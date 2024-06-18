@@ -5,7 +5,7 @@ const cors = require("cors");
 const app = express();
 const path = require("path");
 const connection = require('./config/db');
-let {decodeTheSecret} = require("./services/singin-singnup");
+// let {decodeTheSecret} = require("./services/singin-singnup");
 
 // Connection to DB
 connection.connect()
@@ -31,8 +31,6 @@ app.use('/api/products', ProductRouter);
 app.use('/api/registeruser' , RegisterRouter);
 app.use('/api/loginuser', LoginRouter);
 
-
 app.listen(process.env.CONPORT, () => {
-    console.log(`You are connnected to the server http://localhost:${process.env.PORT}`);
-    
+    console.log(`You are connnected to the server http://localhost:${process.env.CONPORT}`);    
 })
